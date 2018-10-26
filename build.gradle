@@ -1,0 +1,28 @@
+buildscript {
+  repositories {
+    mavenCentral()
+    jcenter()
+  }
+}
+
+plugins {
+  id 'groovy'
+}
+
+repositories {
+  mavenCentral()
+  jcenter()
+}
+
+group 'com.github.etinaa'
+version '0.0.1'
+
+dependencies {
+  compile gradleApi()
+  compile localGroovy()
+  compile 'net.masterthought:cucumber-reporting:4.1.0'
+}
+
+task wrapper(type: Wrapper) {
+  gradleVersion = '4.10.2'
+}
