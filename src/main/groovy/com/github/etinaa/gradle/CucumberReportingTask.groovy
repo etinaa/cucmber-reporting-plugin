@@ -1,5 +1,6 @@
 package com.github.etinaa.gradle
 
+import groovy.io.FileType
 import net.masterthought.cucumber.Configuration
 import net.masterthought.cucumber.ReportBuilder
 import net.masterthought.cucumber.Reportable
@@ -23,18 +24,20 @@ class CucumberReportingTask extends DefaultTask {
 
   List<String> getJsonFiles() {
     def jsonFiles = []
+    extension.reportingDir.eachFileMatch(FileType.FILES, ~/.*\.json/) { jsonFiles.add(it) }
     jsonFiles
   }
 
   Configuration getConfiguration() {
     Configuration configuration = new Configuration(getOutputDir(), getProjectName())
-    configuration.setBuildNumber(getBuildNumber())
-    getClassifications().each {key, value -> configuration.addClassifications(key, value) }
+    configuration.buildNumber = extension.buildNumber
+    configuration.runWithJenkins = extension.runWithJenkins
+    getClassifications().each { key, value -> configuration.addClassifications(key, value) }
     configuration
   }
 
   File getOutputDir() {
-    File outputDir =  extension.outputDir
+    File outputDir = extension.outputDir
     if (!outputDir.exists()) {
       outputDir.mkdirs()
     }
@@ -42,11 +45,7 @@ class CucumberReportingTask extends DefaultTask {
   }
 
   String getProjectName() {
-    extension.projectName
-  }
-
-  String getBuildNumber() {
-    extension.buildNumber
+    extension.projectName ?: 'Cucumber Reporting Project'
   }
 
   Map<String, String> getClassifications() {

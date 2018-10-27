@@ -6,6 +6,7 @@ buildscript {
 }
 
 plugins {
+  id 'java-gradle-plugin'
   id 'groovy'
 }
 
@@ -15,12 +16,25 @@ repositories {
 }
 
 group 'com.github.etinaa'
-version '0.0.1'
+version '0.0.2'
 
 dependencies {
-  compile gradleApi()
   compile localGroovy()
   compile 'net.masterthought:cucumber-reporting:4.1.0'
+
+  testCompile gradleTestKit()
+  testCompile('org.spockframework:spock-core:1.2-groovy-2.4') {
+    exclude module: 'groovy-all'
+  }
+}
+
+gradlePlugin {
+  plugins {
+    simplePlugin {
+      id = 'com.github.etinaa.cucumber-reporting'
+      implementationClass = 'com.github.etinaa.gradle.CucumberReportingPlugin'
+    }
+  }
 }
 
 task wrapper(type: Wrapper) {

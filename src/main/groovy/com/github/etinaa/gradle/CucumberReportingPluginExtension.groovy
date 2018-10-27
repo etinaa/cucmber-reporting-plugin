@@ -11,12 +11,12 @@ class CucumberReportingPluginExtension {
   File outputDir
   String projectName
   String buildNumber
+  boolean runWithJenkins = false
   Map<String, String> classifications
 
   CucumberReportingPluginExtension(Project project) {
     reportingDir = new File(project.buildDir, DEFAULT_REPORTING_DIR)
     outputDir = new File(project.buildDir, DEFAULT_OUTPUT_DIR)
     projectName = project.name
-    classifications = new HashMap<>()
   }
 }
