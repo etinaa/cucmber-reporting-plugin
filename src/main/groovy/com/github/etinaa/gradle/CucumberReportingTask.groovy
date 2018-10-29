@@ -24,7 +24,8 @@ class CucumberReportingTask extends DefaultTask {
 
   List<String> getJsonFiles() {
     def jsonFiles = []
-    extension.reportingDir.eachFileMatch(FileType.FILES, ~/.*\.json/) { jsonFiles.add(it) }
+    (extension.reportingDir ?: extension.defaultReportingDir)
+        .eachFileMatch(FileType.FILES, ~/.*\.json/) { jsonFiles.add(it.absolutePath) }
     jsonFiles
   }
 
@@ -37,7 +38,7 @@ class CucumberReportingTask extends DefaultTask {
   }
 
   File getOutputDir() {
-    File outputDir = extension.outputDir
+    File outputDir = extension.outputDir ?: extension.defaultOutputDir
     if (!outputDir.exists()) {
       outputDir.mkdirs()
     }
@@ -49,6 +50,6 @@ class CucumberReportingTask extends DefaultTask {
   }
 
   Map<String, String> getClassifications() {
-    extension.classifications ?: new HashMap<>()
+    extension.classifications ?: [:]
   }
 }

@@ -1,0 +1,141 @@
+[
+  {
+    "line": 1,
+    "elements": [
+      {
+        "line": 2,
+        "name": "1 + 0",
+        "description": "",
+        "id": "addition;1-+-0",
+        "type": "scenario",
+        "keyword": "Scenario",
+        "steps": [
+          {
+            "result": {
+              "duration": 4944219,
+              "status": "passed"
+            },
+            "line": 3,
+            "name": "I start with 1",
+            "match": {
+              "arguments": [
+                {
+                  "val": "1",
+                  "offset": 13
+                }
+              ],
+              "location": "Addition.I start with(int)"
+            },
+            "keyword": "Given "
+          },
+          {
+            "result": {
+              "duration": 77311,
+              "status": "passed"
+            },
+            "line": 4,
+            "name": "I add 0",
+            "match": {
+              "arguments": [
+                {
+                  "val": "0",
+                  "offset": 6
+                }
+              ],
+              "location": "Addition.I add(int)"
+            },
+            "keyword": "When "
+          },
+          {
+            "result": {
+              "duration": 2612508,
+              "status": "passed"
+            },
+            "line": 5,
+            "name": "I end up with 1",
+            "match": {
+              "arguments": [
+                {
+                  "val": "1",
+                  "offset": 14
+                }
+              ],
+              "location": "Addition.I end up with(int)"
+            },
+            "keyword": "Then "
+          }
+        ]
+      },
+      {
+        "line": 7,
+        "name": "1 + 1",
+        "description": "",
+        "id": "addition;1-+-1",
+        "type": "scenario",
+        "keyword": "Scenario",
+        "steps": [
+          {
+            "result": {
+              "duration": 409162,
+              "status": "passed"
+            },
+            "line": 8,
+            "name": "I start with 1",
+            "match": {
+              "arguments": [
+                {
+                  "val": "1",
+                  "offset": 13
+                }
+              ],
+              "location": "Addition.I start with(int)"
+            },
+            "keyword": "Given "
+          },
+          {
+            "result": {
+              "duration": 65276,
+              "status": "passed"
+            },
+            "line": 9,
+            "name": "I add 1",
+            "match": {
+              "arguments": [
+                {
+                  "val": "1",
+                  "offset": 6
+                }
+              ],
+              "location": "Addition.I add(int)"
+            },
+            "keyword": "When "
+          },
+          {
+            "result": {
+              "duration": 30997,
+              "status": "passed"
+            },
+            "line": 10,
+            "name": "I end up with 2",
+            "match": {
+              "arguments": [
+                {
+                  "val": "2",
+                  "offset": 14
+                }
+              ],
+              "location": "Addition.I end up with(int)"
+            },
+            "keyword": "Then "
+          }
+        ]
+      }
+    ],
+    "name": "Addition",
+    "description": "",
+    "id": "addition",
+    "keyword": "Feature",
+    "uri": "src/test/resources/features/application/Addition.feature",
+    "tags": []
+  }
+]

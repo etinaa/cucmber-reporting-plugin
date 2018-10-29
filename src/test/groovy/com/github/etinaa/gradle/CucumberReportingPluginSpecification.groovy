@@ -4,7 +4,7 @@ import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
 import spock.lang.Specification
 
-class CucumberReportPluginSpecification extends Specification {
+class CucumberReportingPluginSpecification extends Specification {
 
   def "applying plugin"() {
     given:
@@ -12,6 +12,8 @@ class CucumberReportPluginSpecification extends Specification {
     when:
       project.pluginManager.apply 'com.github.etinaa.cucumber-reporting'
     then:
+      project.tasks.getByName(CucumberReportingPlugin.TASK_NAME)
       project.tasks.generateCucumberReports instanceof CucumberReportingTask
+      project.extensions.getByName(CucumberReportingPlugin.EXTENSION_NAME)
   }
 }
