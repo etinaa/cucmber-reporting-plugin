@@ -5,7 +5,6 @@ buildscript {
 }
 
 plugins {
-  id 'java'
   id 'groovy'
   id 'java-gradle-plugin'
   id 'maven-publish'
@@ -67,14 +66,16 @@ bintray {
   publications = ['PluginPublication']
   pkg {
     repo = 'gradle-plugins'
-    name = 'cucumber-reporting-plugin'
+    name = project.name
     licenses = ['MIT']
     vcsUrl = 'https://github.com/etinaa/cucumber-reporting-plugin.git'
-  }
-  version {
-    name = project.version
-    released = new Date()
-    attributes = ['gradle-plugin': 'com.github.etinaa.cucumber-reporting-plugin']
+    version {
+      name = project.version
+      desc = 'Gradle plugin for generating html cucumber reports'
+      released = new Date()
+      vcsTag = project.version
+      attributes = ['gradle-plugin': 'com.github.etinaa.cucumber-reporting-plugin']
+    }
   }
 }
 
