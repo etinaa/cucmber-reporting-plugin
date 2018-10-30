@@ -5,8 +5,11 @@ buildscript {
 }
 
 plugins {
-  id 'java-gradle-plugin'
+  id 'java'
   id 'groovy'
+  id 'java-gradle-plugin'
+  id 'maven-publish'
+  id "com.jfrog.bintray" version "1.8.4"
 }
 
 repositories {
@@ -14,7 +17,7 @@ repositories {
 }
 
 group 'com.github.etinaa'
-version '0.0.3'
+version '0.1.0'
 
 dependencies {
   compile localGroovy()
@@ -29,9 +32,49 @@ dependencies {
 gradlePlugin {
   plugins {
     simplePlugin {
-      id = 'com.github.etinaa.cucumber-reporting'
+      id = 'com.github.etinaa.cucumber-reporting-plugin'
       implementationClass = 'com.github.etinaa.gradle.CucumberReportingPlugin'
     }
+  }
+}
+
+task packageSources(type: Jar, dependsOn: 'classes') {
+  from sourceSets.main.allSource
+  classifier = 'sources'
+}
+
+artifacts {
+  archives packageSources
+}
+
+publishing {
+  publications {
+    PluginPublication(MavenPublication) {
+      from components.java
+      artifact packageSources {
+        classifier "sources"
+      }
+      groupId 'com.github.etinaa'
+      artifactId 'cucumber-reporting-plugin'
+      version project.version
+    }
+  }
+}
+
+bintray {
+  user = System.getProperty('BINTRAY_USER') ?: "${BINTRAY_USER}"
+  key = System.getProperty('BINTRAY_KEY') ?: "${BINTRAY_KEY}"
+  publications = ['PluginPublication']
+  pkg {
+    repo = 'gradle-plugins'
+    name = 'cucumber-reporting-plugin'
+    licenses = ['MIT']
+    vcsUrl = 'https://github.com/etinaa/cucumber-reporting-plugin.git'
+  }
+  version {
+    name = project.version
+    released = new Date()
+    attributes = ['gradle-plugin': 'com.github.etinaa.cucumber-reporting-plugin']
   }
 }
 

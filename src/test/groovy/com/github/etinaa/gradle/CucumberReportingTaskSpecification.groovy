@@ -14,7 +14,7 @@ class CucumberReportingTaskSpecification extends Specification {
   def "extension default properties"() {
     given:
       Project project = ProjectBuilder.builder().withProjectDir(testProjectDir.root).build()
-      project.pluginManager.apply 'com.github.etinaa.cucumber-reporting'
+      project.pluginManager.apply 'com.github.etinaa.cucumber-reporting-plugin'
     when:
       def extension = project.extensions.getByName(CucumberReportingPlugin.EXTENSION_NAME)
     then:
@@ -32,7 +32,7 @@ class CucumberReportingTaskSpecification extends Specification {
       File outputDir = testProjectDir.newFolder('reports')
 
       Project project = ProjectBuilder.builder().withProjectDir(testProjectDir.root).build()
-      project.pluginManager.apply 'com.github.etinaa.cucumber-reporting'
+      project.pluginManager.apply 'com.github.etinaa.cucumber-reporting-plugin'
       def extension = project.extensions.getByName(CucumberReportingPlugin.EXTENSION_NAME)
     when:
       extension.reportingDir = reportingDir
