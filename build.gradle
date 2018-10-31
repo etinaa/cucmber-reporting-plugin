@@ -15,8 +15,21 @@ repositories {
   jcenter()
 }
 
+sourceSets {
+  functionalTest {
+    groovy {
+      srcDir file('src/functionalTest/groovy')
+    }
+    resources {
+      srcDir file('src/functionalTest/resources')
+    }
+    compileClasspath += sourceSets.main.output + configurations.testRuntime
+    runtimeClasspath += output + compileClasspath
+  }
+}
+
 group 'com.github.etinaa'
-version '0.1.0'
+version '0.1.1'
 
 dependencies {
   compile localGroovy()
@@ -35,7 +48,16 @@ gradlePlugin {
       implementationClass = 'com.github.etinaa.gradle.CucumberReportingPlugin'
     }
   }
+
+  testSourceSets sourceSets.functionalTest
 }
+
+task functionalTest(type: Test) {
+  testClassesDirs = sourceSets.functionalTest.output.classesDirs
+  classpath = sourceSets.functionalTest.runtimeClasspath
+}
+
+check.dependsOn functionalTest
 
 task packageSources(type: Jar, dependsOn: 'classes') {
   from sourceSets.main.allSource
@@ -61,17 +83,19 @@ publishing {
 }
 
 bintray {
-  user = System.getProperty('BINTRAY_USER') ?: "${BINTRAY_USER}"
-  key = System.getProperty('BINTRAY_KEY') ?: "${BINTRAY_KEY}"
+  user = project.properties['BINTRAY_USER'] ?: System.getProperty('BINTRAY_USER')
+  key = project.properties['BINTRAY_KEY'] ?: System.getProperty('BINTRAY_KEY')
   publications = ['PluginPublication']
   pkg {
     repo = 'gradle-plugins'
     name = project.name
-    licenses = ['MIT']
+    desc = 'Gradle plugin for generating html cucumber reports'
     vcsUrl = 'https://github.com/etinaa/cucumber-reporting-plugin.git'
+    licenses = ['MIT']
+    labels = ['gradle', 'cucumber', 'reports']
+    githubRepo = 'https://github.com/etinaa/cucumber-reporting-plugin'
     version {
       name = project.version
-      desc = 'Gradle plugin for generating html cucumber reports'
       released = new Date()
       vcsTag = project.version
       attributes = ['gradle-plugin': 'com.github.etinaa.cucumber-reporting-plugin']

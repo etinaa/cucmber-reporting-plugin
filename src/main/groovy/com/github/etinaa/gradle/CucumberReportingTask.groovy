@@ -6,6 +6,8 @@ import net.masterthought.cucumber.ReportBuilder
 import net.masterthought.cucumber.Reportable
 import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
+import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 
 class CucumberReportingTask extends DefaultTask {
@@ -18,10 +20,12 @@ class CucumberReportingTask extends DefaultTask {
     ReportBuilder reportBuilder = new ReportBuilder(getJsonFiles(), getConfiguration())
     Reportable result = reportBuilder.generateReports()
     if (result == null) {
-      throw new GradleException('Failed to generate cucumber report html files.')
+      throw new GradleException('Failed to generate cucumber reports html files.')
     }
+    println "Cucumber reports html files generated in ${outputDir.absolutePath}/cucumber-html-reports"
   }
 
+  @Input
   List<String> getJsonFiles() {
     def jsonFiles = []
     (extension.reportingDir ?: extension.defaultReportingDir)
@@ -37,6 +41,7 @@ class CucumberReportingTask extends DefaultTask {
     configuration
   }
 
+  @OutputDirectory
   File getOutputDir() {
     File outputDir = extension.outputDir ?: extension.defaultOutputDir
     if (!outputDir.exists()) {
@@ -45,10 +50,12 @@ class CucumberReportingTask extends DefaultTask {
     outputDir
   }
 
+  @Input
   String getProjectName() {
     extension.projectName ?: 'Cucumber Reporting Project'
   }
 
+  @Input
   Map<String, String> getClassifications() {
     extension.classifications ?: [:]
   }
