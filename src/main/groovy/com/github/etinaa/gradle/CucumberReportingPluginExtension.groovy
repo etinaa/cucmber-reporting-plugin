@@ -1,6 +1,8 @@
 package com.github.etinaa.gradle
 
+
 import org.gradle.api.Project
+import org.gradle.util.ConfigureUtil
 
 class CucumberReportingPluginExtension {
 
@@ -15,6 +17,7 @@ class CucumberReportingPluginExtension {
   String buildNumber
   boolean runWithJenkins = false
   Map<String, String> classifications
+  Options options = new Options()
 
   CucumberReportingPluginExtension(Project project) {
     this.project = project
@@ -32,5 +35,13 @@ class CucumberReportingPluginExtension {
 
   String getProjectName() {
     projectName ?: project.name
+  }
+
+  def options(Closure closure) {
+    ConfigureUtil.configure(closure, options)
+  }
+
+  class Options {
+    boolean cutHookBefore = false
   }
 }

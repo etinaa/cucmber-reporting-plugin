@@ -1,12 +1,14 @@
 package com.github.etinaa.gradle
 
+
+import groovy.json.JsonOutput
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
-class BuildLogicFunctionalSpecification extends Specification {
+class CutHookBeforeSpecification extends Specification {
 
   @Rule
   final TemporaryFolder testProjectDir = new TemporaryFolder()
@@ -17,19 +19,26 @@ class BuildLogicFunctionalSpecification extends Specification {
     buildFile = testProjectDir.newFile('build.gradle')
   }
 
-  def "execute task generateCucumberReports"() {
+  def "execute task generateCucumberReports with option 'cutHookBefore'"() {
     given:
       File reportingDir = new File(testProjectDir.newFolder('build'), 'cucumber')
       reportingDir.mkdirs()
       File json = new File(reportingDir, 'example.json')
-      json << textOf('addition.json')
+      json << textOf('multiplication.json')
 
       buildFile << """
         plugins {
           id 'com.github.etinaa.cucumber-reporting-plugin'
+        }
+        
+        cucumberReporting {
+          options {
+            cutHookBefore = true  
+          }
         }       
       """
 
+      def expected = JsonOutput.prettyPrint(textOf('multiplication_hook_before_cutted.json'))
     when:
       def result = GradleRunner.create()
           .withProjectDir(testProjectDir.root)
@@ -37,11 +46,12 @@ class BuildLogicFunctionalSpecification extends Specification {
           .withPluginClasspath()
           .build()
 
+      def extFile = reportingDir.listFiles().find { it.isDirectory() && it.name == 'ext' }
+          .listFiles().find { it.isFile() && it.name == 'example_ext.json' }
+      def actual = JsonOutput.prettyPrint(extFile.text)
     then:
       result.task(":generateCucumberReports").outcome == TaskOutcome.SUCCESS
-      result.output.contains("Cucumber reports html files generated in ")
-      result.output.contains("/build/reports/cucumber/cucumber-html-reports")
-      reportingDir.listFiles().size() > 0
+      actual == expected
   }
 
   def textOf(String fileName) {
