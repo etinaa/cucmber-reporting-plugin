@@ -21,6 +21,7 @@ class CucumberReportingTaskSpecification extends Specification {
       extension.reportingDir.absolutePath == project.buildDir.absolutePath + '/cucumber'
       extension.outputDir.absolutePath == project.buildDir.absolutePath + '/reports/cucumber'
       extension.projectName == project.name
+      extension.options.cutHookBefore == false
   }
 
   def "execute action generateReports"() {

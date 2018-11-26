@@ -1,5 +1,6 @@
 package com.github.etinaa.gradle
 
+import com.github.etinaa.utils.json.CuttingTools
 import groovy.io.FileType
 import net.masterthought.cucumber.Configuration
 import net.masterthought.cucumber.ReportBuilder
@@ -28,9 +29,30 @@ class CucumberReportingTask extends DefaultTask {
   @Input
   List<String> getJsonFiles() {
     def jsonFiles = []
-    (extension.reportingDir ?: extension.defaultReportingDir)
-        .eachFileMatch(FileType.FILES, ~/.*\.json/) { jsonFiles.add(it.absolutePath) }
+    getReportingDir().eachFileMatch(FileType.FILES, ~/.*\.json/) {
+      println it.absolutePath
+      jsonFiles.add(applyOptions(it))
+    }
     jsonFiles
+  }
+
+  File getReportingDir() {
+    extension.reportingDir ?: extension.defaultReportingDir
+  }
+
+  String applyOptions(File jsonFile) {
+    File extDir = new File(getReportingDir(), 'ext')
+    extDir.mkdir()
+    File file = new File(extDir, jsonFile.name.replace('.json', '_ext.json'))
+    if (!file.exists()) {
+      String json = jsonFile.text
+      if (extension.options.cutHookBefore) {
+        json = CuttingTools.cutHookBefore(json)
+      }
+      file << json
+      println "Applied options to ${jsonFile.name}. New json file created in ${file.absolutePath}"
+    }
+    file.absolutePath
   }
 
   Configuration getConfiguration() {
